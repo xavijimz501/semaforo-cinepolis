@@ -117,7 +117,7 @@ export default function EstadisticasPage() {
 
     };
 
-    const handleCellClick = (data: { estadoId: number; municipioId: number; fecha: string; }) => {
+    const handleCellClick = (_data: { estadoId: number; municipioId: number; fecha: string; }) => {
         //console.log("Click celda", data);
         // setFilters(prev => ({
         //     ...prev,

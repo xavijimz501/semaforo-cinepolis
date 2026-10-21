@@ -70,12 +70,15 @@ function generateMunicipios(
             { length: 15 },
             (_, index) => ({
                 id: `${estadoId}-${index + 1}`,
-
+                estadoId: Number(estadoId),
                 name: `${estadoNombre} Municipio ${index + 1}`,
 
                 values: DAYS.map((day) => ({
                     day,
                     total: random(0, 30),
+                    estatus: "verde",
+                    estadoId: Number(estadoId),
+                    municipioId: index + 1,
                 })),
             })
         );
@@ -89,7 +92,7 @@ function generateMunicipios(
 export const municipiosMock: MunicipioData[] =
     estadosMock.map((estado) =>
         generateMunicipios(
-            estado.id,
+            String(estado.id),
             estado.name
         )
     );

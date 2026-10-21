@@ -5,9 +5,10 @@ import type { AutoridadGroup } from "../../../types/dashboard.types";
 interface Props {
     rows: AutoridadGroup[];
     onAutoridadClick?: (autoridad: string) => void;
+    maxHeight?: string;
 }
 
-export default function AutoridadesTable({ rows, onAutoridadClick }: Props) {
+export default function AutoridadesTable({ rows, onAutoridadClick, maxHeight = "max-h-[600px]" }: Props) {
 
     const flatRows = useMemo(() => {
         return rows.flatMap(grupo => grupo.autoridades);
@@ -45,7 +46,7 @@ export default function AutoridadesTable({ rows, onAutoridadClick }: Props) {
         return "text-red-700 font-semibold";
     };
 
-    const thBase = "px-1 py-2 text-center text-[9px] sm:text-[10px] md:text-[11px] lg:text-xs font-semibold tracking-tight";
+    const thBase = "sticky top-0 z-30 bg-[#611232] px-1 py-2 text-center text-[9px] sm:text-[10px] md:text-[11px] lg:text-xs font-semibold tracking-tight text-white border-b border-[#4d0e27]";
     const tdBase = "py-1.5 px-1 text-center text-[9px] sm:text-[10px] md:text-[11px] lg:text-xs tabular-nums";
 
 
@@ -199,7 +200,7 @@ export default function AutoridadesTable({ rows, onAutoridadClick }: Props) {
     };
 
     return (
-        <div className="w-full overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-sm">
+        <div className={`w-full overflow-y-auto overflow-x-auto ${maxHeight} rounded-2xl border border-slate-200 bg-white shadow-sm`}>
 
             <table className="w-full border-collapse table-fixed min-w-[680px]">
 
@@ -218,10 +219,10 @@ export default function AutoridadesTable({ rows, onAutoridadClick }: Props) {
                     <col style={{ width: "9%" }} />
                 </colgroup>
 
-                <thead>
+                <thead className="sticky top-0 z-30 bg-[#611232]">
                     <tr className="bg-[#611232] text-white">
 
-                        <th className="sticky left-0 z-20 bg-[#611232] px-3 py-2 text-left text-[9px] sm:text-[10px] md:text-[11px] lg:text-xs font-semibold">
+                        <th className="sticky top-0 left-0 z-40 bg-[#611232] px-3 py-2 text-left text-[9px] sm:text-[10px] md:text-[11px] lg:text-xs font-semibold text-white border-b border-[#4d0e27]">
                             Autoridad
                         </th>
 
@@ -230,14 +231,14 @@ export default function AutoridadesTable({ rows, onAutoridadClick }: Props) {
                         ))}
 
                         {/* Sin Alerta (Localizados) — encabezado amarillo */}
-                        <th className="px-1 py-2 text-center text-[9px] sm:text-[10px] md:text-[11px] lg:text-xs font-semibold tracking-tight bg-amber-400 text-amber-900">
+                        <th className="sticky top-0 z-30 px-1 py-2 text-center text-[9px] sm:text-[10px] md:text-[11px] lg:text-xs font-semibold tracking-tight bg-amber-400 text-amber-900 border-b border-amber-500">
                             Sin Alerta
                             <br />
                             <span className="font-normal">(Localizados)</span>
                         </th>
 
                         {/* Sin Alerta (Faltan Datos) — encabezado amarillo */}
-                        <th className="px-1 py-2 text-center text-[9px] sm:text-[10px] md:text-[11px] lg:text-xs font-semibold tracking-tight bg-amber-400 text-amber-900">
+                        <th className="sticky top-0 z-30 px-1 py-2 text-center text-[9px] sm:text-[10px] md:text-[11px] lg:text-xs font-semibold tracking-tight bg-amber-400 text-amber-900 border-b border-amber-500">
                             Sin Alerta
                             <br />
                             <span className="font-normal">(Faltan Datos)</span>
@@ -270,7 +271,7 @@ export default function AutoridadesTable({ rows, onAutoridadClick }: Props) {
 
                                     <td
                                         className={`
-                                            sticky left-0 px-3 py-1.5
+                                            sticky left-0 z-10 px-3 py-1.5
                                             ${grupoIndex % 2 === 0
                                                 ? "bg-white"
                                                 : "bg-slate-100"}
@@ -348,7 +349,7 @@ export default function AutoridadesTable({ rows, onAutoridadClick }: Props) {
                 <tfoot>
                     <tr className="bg-slate-900 text-white font-bold">
 
-                        <td className="px-3 py-2 text-[9px] sm:text-[10px] md:text-[11px] lg:text-xs font-bold tracking-wider sticky left-0 bg-slate-900">
+                        <td className="px-3 py-2 text-[9px] sm:text-[10px] md:text-[11px] lg:text-xs font-bold tracking-wider sticky left-0 z-10 bg-slate-900">
                             TOTAL
                         </td>
 

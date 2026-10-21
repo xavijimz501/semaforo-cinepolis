@@ -4,9 +4,10 @@ import type { CumplimientoEstado } from "../../../types/dashboard.types";
 interface Props {
     rows: CumplimientoEstado[];
     onEstadoClick?: (estado: string) => void;
+    maxHeight?: string;
 }
 
-export default function CumplimientoTable({ rows, onEstadoClick }: Props) {
+export default function CumplimientoTable({ rows, onEstadoClick, maxHeight = "max-h-[600px]" }: Props) {
 
     const totals = useMemo(() => {
         return rows.reduce((acc, item) => ({
@@ -45,14 +46,14 @@ export default function CumplimientoTable({ rows, onEstadoClick }: Props) {
 
     // Clases compartidas para compactar celdas de datos
     const cellBase = "py-1.5 px-1 text-center text-xs";
-    const thBase = "px-1 py-2 text-center text-[9px] sm:text-[10px] md:text-[11px] lg:text-xs font-semibold tracking-tight";
+    const thBase = "sticky top-0 z-30 bg-[#611232] px-1 py-2 text-center text-[9px] sm:text-[10px] md:text-[11px] lg:text-xs font-semibold tracking-tight text-white border-b border-[#4d0e27]";
 
     const sortedRows = useMemo(() => {
         return [...rows].sort((a, b) => a.cumplimiento - b.cumplimiento);
     }, [rows]);
 
     return (
-        <div className="w-full overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-sm">
+        <div className={`w-full overflow-y-auto overflow-x-auto ${maxHeight} rounded-2xl border border-slate-200 bg-white shadow-sm`}>
 
             <table className="w-full border-collapse table-fixed min-w-[700px]">
 
@@ -68,10 +69,10 @@ export default function CumplimientoTable({ rows, onEstadoClick }: Props) {
                     <col className="w-[9%]" />
                 </colgroup>
 
-                <thead>
+                <thead className="sticky top-0 z-30 bg-[#611232]">
                     <tr className="bg-[#611232] text-white">
 
-                        <th className="sticky left-0 z-20 bg-[#611232] px-3 py-2 text-left text-[9px] sm:text-[10px] md:text-[11px] lg:text-xs font-semibold">
+                        <th className="sticky top-0 left-0 z-40 bg-[#611232] px-3 py-2 text-left text-[9px] sm:text-[10px] md:text-[11px] lg:text-xs font-semibold text-white border-b border-[#4d0e27]">
                             Estado
                         </th>
 
@@ -85,7 +86,7 @@ export default function CumplimientoTable({ rows, onEstadoClick }: Props) {
                         ))}
 
                         {/* Falta Dato — amarillo */}
-                        <th className="px-1 py-2 text-center text-[9px] sm:text-[10px] md:text-[11px] lg:text-xs font-semibold tracking-tight bg-amber-400 text-amber-900">
+                        <th className="sticky top-0 z-30 px-1 py-2 text-center text-[9px] sm:text-[10px] md:text-[11px] lg:text-xs font-semibold tracking-tight bg-amber-400 text-amber-900 border-b border-amber-500">
                             Falta Dato
                         </th>
 
@@ -105,7 +106,7 @@ export default function CumplimientoTable({ rows, onEstadoClick }: Props) {
                         >
                             {/* Nombre del estado */}
                             <td className={`
-                                sticky left-0 px-3 py-1.5
+                                sticky left-0 z-10 px-3 py-1.5
                                 ${index % 2 === 0 ? "bg-white" : "bg-slate-100"}
                             `}>
                                 <button
@@ -162,7 +163,7 @@ export default function CumplimientoTable({ rows, onEstadoClick }: Props) {
                 <tfoot>
                     <tr className="bg-slate-900 text-white font-bold">
 
-                        <td className="px-3 py-2 text-[9px] sm:text-[10px] md:text-[11px] lg:text-xs font-bold tracking-wider">
+                        <td className="px-3 py-2 text-[9px] sm:text-[10px] md:text-[11px] lg:text-xs font-bold tracking-wider sticky left-0 z-10 bg-slate-900 text-white">
                             TOTAL
                         </td>
 

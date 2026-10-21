@@ -102,7 +102,7 @@ export default function EstadisticasDosPage() {
 
                 <div>
 
-                    <h1 className="text-2xl font-bold tracking-tight text-[#611232] mb-6l">
+                    <h1 className="text-2xl font-bold tracking-tight text-[#611232] mb-6">
                         Cumplimiento de Alertas por Autoridad
                     </h1>
 

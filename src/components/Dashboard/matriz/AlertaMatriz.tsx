@@ -10,9 +10,10 @@ interface Props {
         municipioId: number;
         fecha: string;
     }) => void;
+    maxHeight?: string;
 }
 
-export default function AlertaMatriz({ rows, level, onRowClick, onCellClick }: Props) {
+export default function AlertaMatriz({ rows, level, onRowClick, onCellClick, maxHeight = "max-h-[600px]" }: Props) {
 
     const dates = useMemo(() => {
         if (!rows.length) return [];
@@ -53,12 +54,12 @@ export default function AlertaMatriz({ rows, level, onRowClick, onCellClick }: P
                 </div>
             </div>
 
-            {/* Tabla sin scroll, totalmente ajustada */}
-            <div className="w-full overflow-hidden">
+            {/* Tabla con scroll vertical y encabezado fijo */}
+            <div className={`w-full overflow-y-auto ${maxHeight}`}>
                 <table className="w-full border-collapse table-fixed">
 
-                    <thead>
-                        <tr>
+                    <thead className="sticky top-0 z-30 bg-white">
+                        <tr className="bg-white">
                             {/* Columna de nombres */}
                             <th className="
                                 w-[22%]
@@ -67,14 +68,14 @@ export default function AlertaMatriz({ rows, level, onRowClick, onCellClick }: P
                                 lg:w-[15%]
                                 xl:w-[12%]
                                 2xl:w-[10%]
-                                sticky left-0 z-20 bg-white
+                                sticky top-0 left-0 z-40 bg-white border-b border-slate-200
                             " />
 
                             {/* Cabeceras de fechas: distribuidas equitativamente */}
                             {dates.map(date => (
                                 <th
                                     key={date}
-                                    className="p-0 align-bottom"
+                                    className="sticky top-0 z-30 bg-white p-0 align-bottom border-b border-slate-200"
                                     style={{ width: `${78 / dates.length}%` }}
                                 >
                                     <div className="
@@ -116,7 +117,7 @@ export default function AlertaMatriz({ rows, level, onRowClick, onCellClick }: P
                                 ">
                                     <button
                                         onClick={() => {
-                                            if (level === "estado") onRowClick?.(row.estadoId);
+                                            if (level === "estado") onRowClick?.(Number(row.estadoId));
                                         }}
                                         className="group flex w-full items-center text-left"
                                     >

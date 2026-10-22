@@ -52,6 +52,7 @@ export default function EstadisticasPage() {
                     name: municipio.municipio,
                     values: municipio.detalleUltimos30Dias.map((dia: any) => ({
                         day: dia.fecha,
+                        fechaConsulta: dia.fecha,
                         total: dia.totalRegistros,
                         estatus: dia.estatusDia,
                         estadoId: estado.idEstado,
@@ -70,6 +71,7 @@ export default function EstadisticasPage() {
 
                     values: estado.detalleUltimos30Dias.map((dia: any) => ({
                         day: dia.fecha.slice(0, 10),
+                        fechaConsulta: dia.fecha,
                         total: dia.totalRegistros,
                         estatus: dia.estatusDia,
                         estadoId: estado.idEstado,

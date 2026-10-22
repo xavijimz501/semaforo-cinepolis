@@ -5,6 +5,7 @@ export interface HeatmapCell {
 
 export interface HeatmapValue {
     day: string;
+    fechaConsulta?: string;
     total: number;
     estatus: string;
     estadoId: number;

@@ -1,6 +1,7 @@
 import { Fragment, useMemo, useState } from "react";
 import type { HeatmapRow } from "../../../types/dashboard.types";
 import { GetObtenerFub } from "../../../services/dashboard.service";
+import alertaImg from "../../../assets/alerta.png";
 
 type FubRecord = {
     fub: string | number; estatusVictima?: string; edad?: number; fechaHechos?: string;
@@ -290,31 +291,44 @@ export default function AlertaMatriz({ rows, level, onRowClick, onCellClick, max
 
                                             return (
                                                 <td key={date} className="p-[1px]">
-                                                    {records.map(record => (
-                                                        <button
-                                                            key={String(record.fub)}
-                                                            onClick={() => setSelectedFub(record)}
-                                                            title={`FUB: ${record.fub} · Clic para ver detalle`}
-                                                            aria-label={`Ver detalle FUB ${record.fub}`}
-                                                            className={`
-                                                                w-full
-                                                                aspect-square
-                                                                rounded-xl
-                                                                ${getColor(fubResult?.clickedEstatus ?? estatusDia ?? "")}
-                                                                transition-transform
-                                                                duration-150
-                                                                hover:scale-110
-                                                                hover:z-20
-                                                                hover:relative
-                                                                cursor-pointer
-                                                                block
-                                                                text-xs
-                                                                text-slate-100
-                                                            `}
-                                                        >
-                                                            -
-                                                        </button>
-                                                    ))}
+                                                    {records.map(record => {
+                                                        const noTieneAlertamiento = String(record.existeAlertamiento ?? "").trim().toUpperCase() === "SI"; //Aqui guardamos la consulta en caso de que no tenga alertamiento
+                                                        return (
+                                                            <button
+                                                                key={String(record.fub)}
+                                                                onClick={() => setSelectedFub(record)}
+                                                                title={`FUB: ${record.fub} · Clic para ver detalle`}
+                                                                aria-label={`Ver detalle FUB ${record.fub}`}
+                                                                className={`
+                                                                    w-full
+                                                                    aspect-square
+                                                                    rounded-xl
+                                                                    ${getColor(fubResult?.clickedEstatus ?? estatusDia ?? "")}
+                                                                    transition-transform
+                                                                    duration-150
+                                                                    hover:scale-110
+                                                                    hover:z-20
+                                                                    hover:relative
+                                                                    cursor-pointer
+                                                                    flex
+                                                                    items-center
+                                                                    justify-center
+                                                                    text-xs
+                                                                    text-slate-100
+                                                                `}
+                                                            >
+                                                                {noTieneAlertamiento ? (
+                                                                    <img
+                                                                        src={alertaImg}
+                                                                        alt="Alerta"
+                                                                        className="w-4 h-4 object-contain pointer-events-none"
+                                                                    />
+                                                                ) : (
+                                                                    "-"
+                                                                )}
+                                                            </button>
+                                                        );
+                                                    })}
                                                     {records.length === 0 && <div aria-hidden="true" className="w-full aspect-square" />}
                                                 </td>
                                             );

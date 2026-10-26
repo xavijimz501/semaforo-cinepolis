@@ -2,6 +2,7 @@ import { Fragment, useMemo, useState } from "react";
 import type { HeatmapRow } from "../../../types/dashboard.types";
 import { GetObtenerFub } from "../../../services/dashboard.service";
 import alertaImg from "../../../assets/alerta.png";
+import { CircleSlash, Siren } from "lucide-react";
 
 type FubRecord = {
     fub: string | number; estatusVictima?: string; edad?: number; fechaHechos?: string;
@@ -226,12 +227,17 @@ export default function AlertaMatriz({ rows, level, onRowClick, onCellClick, max
                                         <td key={value.day} className="p-[1px]">
                                             <button
                                                 onClick={async () => {
+                                                    const cellDate = dateKey(value.fechaConsulta ?? value.day);
+                                                    if (fubResult?.rowId === String(row.id) && fubResult?.clickedDate === cellDate) {
+                                                        setFubResult(null);
+                                                        return;
+                                                    }
+
                                                     onCellClick?.({
                                                         estadoId: value.estadoId,
                                                         municipioId: value.municipioId,
                                                         fecha: value.fechaConsulta ?? value.day,
                                                     });
-                                                    const cellDate = dateKey(value.fechaConsulta ?? value.day);
                                                     setLoadingFubRow(String(row.id));
                                                     setFubResult(null);
                                                     try {
@@ -277,7 +283,7 @@ export default function AlertaMatriz({ rows, level, onRowClick, onCellClick, max
                                 {fubResult?.rowId === String(row.id) && (
                                     <tr className="bg-slate-50/70">
                                         <td className="sticky left-0 z-10 border-b border-slate-200 bg-slate-50 p-2 text-[10px] font-semibold text-slate-700 shadow-sm">
-                                            FUB ({fubResult.totalRegistros})
+                                            Fechas de captura ({fubResult.totalRegistros})
                                         </td>
                                         {dates.map((date, index) => {
                                             const headerDateKey = dateKey(date);
@@ -318,13 +324,9 @@ export default function AlertaMatriz({ rows, level, onRowClick, onCellClick, max
                                                                 `}
                                                             >
                                                                 {noTieneAlertamiento ? (
-                                                                    <img
-                                                                        src={alertaImg}
-                                                                        alt="Alerta"
-                                                                        className="w-4 h-4 object-contain pointer-events-none"
-                                                                    />
+                                                                    <Siren size={20} className="text-white" />
                                                                 ) : (
-                                                                    "-"
+                                                                    <CircleSlash size={20} className="text-white" />
                                                                 )}
                                                             </button>
                                                         );

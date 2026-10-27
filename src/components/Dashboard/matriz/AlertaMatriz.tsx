@@ -195,7 +195,7 @@ export default function AlertaMatriz({ rows, level, onRowClick, onCellClick, max
                                     {/* Nombre de fila */}
                                     <td className="
                                     sticky left-0 z-10 bg-white
-                                    py-px pr-1.5
+                                    py-0 pr-1
                                     ">
                                         <button
                                             onClick={() => {
@@ -206,15 +206,15 @@ export default function AlertaMatriz({ rows, level, onRowClick, onCellClick, max
                                             <span className="
                                             block
                                             truncate
-                                            text-[9px]
-                                            sm:text-[10px]
-                                            md:text-[11px]
-                                            lg:text-xs
-                                            xl:text-sm
+                                            text-[8px]
+                                            sm:text-[9px]
+                                            md:text-[10px]
+                                            lg:text-[11px]
                                             font-medium
                                             text-slate-700
                                             group-hover:text-[#611232]
                                             transition-colors
+                                            leading-tight
                                         ">
                                                 {row.name}
                                             </span>
@@ -223,7 +223,7 @@ export default function AlertaMatriz({ rows, level, onRowClick, onCellClick, max
 
                                     {/* Celdas de color */}
                                     {row.values.map(value => (
-                                        <td key={value.day} className="p-[1px]">
+                                        <td key={value.day} className="p-[0.5px]">
                                             <button
                                                 onClick={async () => {
                                                     const cellDate = dateKey(value.fechaConsulta ?? value.day);
@@ -260,7 +260,10 @@ export default function AlertaMatriz({ rows, level, onRowClick, onCellClick, max
                                                 className={`
                                                 w-full
                                                 aspect-square
-                                                rounded-xl
+                                                max-w-[22px]
+                                                max-h-[22px]
+                                                mx-auto
+                                                rounded-md
                                                 ${getColor(value.estatus)}
                                                 transition-transform
                                                 duration-150
@@ -268,9 +271,13 @@ export default function AlertaMatriz({ rows, level, onRowClick, onCellClick, max
                                                 hover:z-20
                                                 hover:relative
                                                 cursor-pointer
-                                                block
-                                                text-xs
+                                                flex
+                                                items-center
+                                                justify-center
+                                                text-[9px]
+                                                font-medium
                                                 text-slate-100
+                                                leading-none
                                             `}
                                             >
                                                 {value.total}
@@ -281,7 +288,7 @@ export default function AlertaMatriz({ rows, level, onRowClick, onCellClick, max
                                 </tr>
                                 {fubResult?.rowId === String(row.id) && (
                                     <tr className="bg-slate-50/70">
-                                        <td className="sticky left-0 z-10 border-b border-slate-200 bg-slate-50 p-2 text-[10px] font-semibold text-slate-700 shadow-sm">
+                                        <td className="sticky left-0 z-10 border-b border-slate-200 bg-slate-50 px-1 py-1 text-[9px] font-semibold text-slate-700 shadow-sm leading-tight">
                                             Fechas de captura ({fubResult.totalRegistros})
                                         </td>
                                         {dates.map((date, index) => {
@@ -295,9 +302,9 @@ export default function AlertaMatriz({ rows, level, onRowClick, onCellClick, max
                                             const estatusDia = cellValue?.estatus;
 
                                             return (
-                                                <td key={date} className="p-[1px]">
+                                                <td key={date} className="p-[0.5px]">
                                                     {records.map(record => {
-                                                        const noTieneAlertamiento = String(record.existeAlertamiento ?? "").trim().toUpperCase() === "SI"; //Aqui guardamos la consulta en caso de que no tenga alertamiento
+                                                        const noTieneAlertamiento = String(record.existeAlertamiento ?? "").trim().toUpperCase() === "NO"; //Aqui guardamos la consulta en caso de que no tenga alertamiento
                                                         return (
                                                             <button
                                                                 key={String(record.fub)}
@@ -307,7 +314,10 @@ export default function AlertaMatriz({ rows, level, onRowClick, onCellClick, max
                                                                 className={`
                                                                     w-full
                                                                     aspect-square
-                                                                    rounded-xl
+                                                                    max-w-[22px]
+                                                                    max-h-[22px]
+                                                                    mx-auto
+                                                                    rounded-md
                                                                     ${getColor(fubResult?.clickedEstatus ?? estatusDia ?? "")}
                                                                     transition-transform
                                                                     duration-150
@@ -318,19 +328,19 @@ export default function AlertaMatriz({ rows, level, onRowClick, onCellClick, max
                                                                     flex
                                                                     items-center
                                                                     justify-center
-                                                                    text-xs
+                                                                    text-[9px]
                                                                     text-slate-100
                                                                 `}
                                                             >
                                                                 {noTieneAlertamiento ? (
-                                                                    <Siren size={20} className="text-white" />
+                                                                    <Siren size={13} className="text-white" />
                                                                 ) : (
-                                                                    <CircleSlash size={20} className="text-white" />
+                                                                    <CircleSlash size={13} className="text-white" />
                                                                 )}
                                                             </button>
                                                         );
                                                     })}
-                                                    {records.length === 0 && <div aria-hidden="true" className="w-full aspect-square" />}
+                                                    {records.length === 0 && <div aria-hidden="true" className="w-full aspect-square max-w-[22px] mx-auto" />}
                                                 </td>
                                             );
                                         })}

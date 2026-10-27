@@ -260,7 +260,7 @@ export default function AlertaMatriz({ rows, level, onRowClick, onCellClick, max
                                                 className={`
                                                 w-full
                                                 aspect-square
-                                                max-w-[22px]
+                                                max-w-[28px]
                                                 max-h-[22px]
                                                 mx-auto
                                                 rounded-md
@@ -304,7 +304,7 @@ export default function AlertaMatriz({ rows, level, onRowClick, onCellClick, max
                                             return (
                                                 <td key={date} className="p-[0.5px]">
                                                     {records.map(record => {
-                                                        const noTieneAlertamiento = String(record.existeAlertamiento ?? "").trim().toUpperCase() === "NO"; //Aqui guardamos la consulta en caso de que no tenga alertamiento
+                                                        const noTieneAlertamiento = String(record.existeAlertamiento ?? "").trim().toUpperCase() === "SI"; //Aqui guardamos la consulta en caso de que no tenga alertamiento
                                                         return (
                                                             <button
                                                                 key={String(record.fub)}
@@ -314,7 +314,7 @@ export default function AlertaMatriz({ rows, level, onRowClick, onCellClick, max
                                                                 className={`
                                                                     w-full
                                                                     aspect-square
-                                                                    max-w-[22px]
+                                                                    max-w-[28px]
                                                                     max-h-[22px]
                                                                     mx-auto
                                                                     rounded-md

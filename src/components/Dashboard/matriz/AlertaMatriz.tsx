@@ -85,7 +85,7 @@ interface Props {
     maxHeight?: string;
 }
 
-export default function AlertaMatriz({ rows, level, onRowClick, onCellClick, maxHeight = "max-h-[600px]" }: Props) {
+export default function AlertaMatriz({ rows, level, onRowClick, onCellClick, maxHeight = "max-h-[800px]" }: Props) {
     const [fubResult, setFubResult] = useState<{
         rowId: string;
         clickedDate: string;

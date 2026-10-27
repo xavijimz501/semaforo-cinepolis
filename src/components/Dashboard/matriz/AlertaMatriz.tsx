@@ -1,7 +1,6 @@
 import { Fragment, useMemo, useState } from "react";
 import type { HeatmapRow } from "../../../types/dashboard.types";
 import { GetObtenerFub } from "../../../services/dashboard.service";
-import alertaImg from "../../../assets/alerta.png";
 import { CircleSlash, Siren } from "lucide-react";
 
 type FubRecord = {
@@ -348,7 +347,7 @@ export default function AlertaMatriz({ rows, level, onRowClick, onCellClick, max
             {selectedFub && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 p-4" onClick={() => setSelectedFub(null)}>
                     <div role="dialog" aria-modal="true" aria-labelledby="fub-title" className="w-full max-w-md rounded-2xl bg-white p-5 shadow-xl" onClick={event => event.stopPropagation()}>
-                        <div className="mb-4 flex items-center justify-between"><h2 id="fub-title" className="text-lg font-semibold text-[#611232]">Detalle FUB</h2><button aria-label="Cerrar detalle" onClick={() => setSelectedFub(null)} className="rounded px-2 py-1 text-slate-500 hover:bg-slate-100">✕</button></div>
+                        <div className="mb-4 flex items-center justify-between"><h2 id="fub-title" className="text-lg font-semibold text-[#611232]">Detalle</h2><button aria-label="Cerrar detalle" onClick={() => setSelectedFub(null)} className="rounded px-2 py-1 text-slate-500 hover:bg-slate-100">✕</button></div>
                         <dl className="grid grid-cols-[max-content_1fr] gap-x-4 gap-y-2 text-sm">
                             {([["FUB", selectedFub.fub], ["Estatus víctima", selectedFub.estatusVictima], ["Edad", selectedFub.edad], ["Fecha de hechos", selectedFub.fechaHechos], ["Fecha de percato", selectedFub.fechaPercato], ["Fecha de captura", selectedFub.fechaCaptura], ["Existe alertamiento", selectedFub.existeAlertamiento]] as const).map(([label, value]) => <Fragment key={label}><dt className="font-medium text-slate-500">{label}</dt><dd className="break-words text-slate-800">{value ?? "—"}</dd></Fragment>)}
                         </dl>

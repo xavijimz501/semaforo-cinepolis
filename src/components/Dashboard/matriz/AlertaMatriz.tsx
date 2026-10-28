@@ -2,6 +2,7 @@ import { Fragment, useMemo, useState } from "react";
 import type { HeatmapRow } from "../../../types/dashboard.types";
 import { GetObtenerFub } from "../../../services/dashboard.service";
 import alertaImg from "../../../assets/alerta.png";
+import { CircleDashed } from "lucide-react";
 
 type FubRecord = {
     fub: string | number; estatusVictima?: string; edad?: number; fechaHechos?: string;
@@ -363,10 +364,10 @@ export default function AlertaMatriz({ rows, level, onRowClick, onCellClick, max
                                                                                 <img
                                                                                     src={alertaImg}
                                                                                     alt="Alerta"
-                                                                                    className="w-4 h-4 object-contain pointer-events-none"
+                                                                                    className="w-5 h-5 object-contain pointer-events-none"
                                                                                 />
                                                                             ) : (
-                                                                                "-"
+                                                                                <CircleDashed size={17} className="text-white" />
                                                                             )}
                                                                         </button>
                                                                     );

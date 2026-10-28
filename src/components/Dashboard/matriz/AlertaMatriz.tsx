@@ -1,7 +1,7 @@
 import { Fragment, useMemo, useState } from "react";
 import type { HeatmapRow } from "../../../types/dashboard.types";
 import { GetObtenerFub } from "../../../services/dashboard.service";
-import { CircleSlash, Siren } from "lucide-react";
+import alertaImg from "../../../assets/alerta.png";
 
 type FubRecord = {
     fub: string | number; estatusVictima?: string; edad?: number; fechaHechos?: string;
@@ -222,130 +222,165 @@ export default function AlertaMatriz({ rows, level, onRowClick, onCellClick, max
                                     </td>
 
                                     {/* Celdas de color */}
-                                    {row.values.map(value => (
-                                        <td key={value.day} className="p-[0.5px]">
-                                            <button
-                                                onClick={async () => {
-                                                    const cellDate = dateKey(value.fechaConsulta ?? value.day);
-                                                    if (fubResult?.rowId === String(row.id) && fubResult?.clickedDate === cellDate) {
-                                                        setFubResult(null);
-                                                        return;
-                                                    }
+                                    {row.values.map(value => {
+                                        const cellDate = dateKey(value.fechaConsulta ?? value.day);
+                                        // Verificamos si este botón es el que actualmente tiene los registros desplegados
+                                        const isSelectedCell = fubResult?.rowId === String(row.id) && fubResult?.clickedDate === cellDate;
 
-                                                    onCellClick?.({
-                                                        estadoId: value.estadoId,
-                                                        municipioId: value.municipioId,
-                                                        fecha: value.fechaConsulta ?? value.day,
-                                                    });
-                                                    setLoadingFubRow(String(row.id));
-                                                    setFubResult(null);
-                                                    try {
-                                                        const response = await GetObtenerFub(value.estadoId, cellDate);
-                                                        const records = getFubRecords(response);
-                                                        setFubResult({
-                                                            rowId: String(row.id),
-                                                            clickedDate: cellDate,
-                                                            records,
-                                                            totalRegistros: getTotalRegistros(response, records.length),
-                                                            clickedEstatus: value.estatus, // Guardamos el estatus exacto del botón clickeado
+                                        return (
+                                            <td key={value.day} className="p-[0.5px]">
+                                                <button
+                                                    onClick={async () => {
+                                                        if (!value.total || value.total === 0) {
+                                                            setFubResult(null);
+                                                            return;
+                                                        }
+
+                                                        if (isSelectedCell) {
+                                                            setFubResult(null);
+                                                            return;
+                                                        }
+
+                                                        onCellClick?.({
+                                                            estadoId: value.estadoId,
+                                                            municipioId: value.municipioId,
+                                                            fecha: value.fechaConsulta ?? value.day,
                                                         });
-                                                    } catch (error) {
-                                                        console.error("No se pudo obtener el detalle FUB", error);
-                                                        setFubResult({ rowId: String(row.id), clickedDate: dateKey(cellDate), records: [], totalRegistros: 0, clickedEstatus: value.estatus });
-                                                    } finally {
-                                                        setLoadingFubRow(null);
-                                                    }
-                                                }}
-                                                title={`${value.total} registros`}
-                                                className={`
-                                                w-full
-                                                aspect-square
-                                                max-w-[28px]
-                                                max-h-[22px]
-                                                mx-auto
-                                                rounded-md
-                                                ${getColor(value.estatus)}
-                                                transition-transform
-                                                duration-150
-                                                hover:scale-110
-                                                hover:z-20
-                                                hover:relative
-                                                cursor-pointer
-                                                flex
-                                                items-center
-                                                justify-center
-                                                text-[9px]
-                                                font-medium
-                                                text-slate-100
-                                                leading-none
-                                            `}
-                                            >
-                                                {value.total}
-                                            </button>
-                                        </td>
-                                    ))}
 
+                                                        setLoadingFubRow(String(row.id));
+                                                        setFubResult(null);
+
+                                                        try {
+                                                            const response = await GetObtenerFub(value.estadoId, cellDate);
+                                                            const records = getFubRecords(response);
+                                                            setFubResult({
+                                                                rowId: String(row.id),
+                                                                clickedDate: cellDate,
+                                                                records,
+                                                                totalRegistros: getTotalRegistros(response, records.length),
+                                                                clickedEstatus: value.estatus,
+                                                            });
+                                                        } catch (error) {
+                                                            console.error("No se pudo obtener el detalle FUB", error);
+                                                            setFubResult({ rowId: String(row.id), clickedDate: cellDate, records: [], totalRegistros: 0, clickedEstatus: value.estatus });
+                                                        } finally {
+                                                            setLoadingFubRow(null);
+                                                        }
+                                                    }}
+                                                    title={`${value.total} registros`}
+                                                    className={`
+                                                        w-full
+                                                        aspect-square
+                                                        max-w-[28px]
+                                                        max-h-[22px]
+                                                        mx-auto
+                                                        rounded-md
+                                                        ${getColor(value.estatus)}
+                                                        transition-all
+                                                        duration-150
+                                                        hover:scale-110
+                                                        hover:z-20
+                                                        hover:relative
+                                                        cursor-pointer
+                                                        flex
+                                                        items-center
+                                                        justify-center
+                                                        text-[9px]
+                                                        font-medium
+                                                        text-slate-100
+                                                        leading-none
+                                                        ${isSelectedCell ? 'ring-2 ring-yellow-400 ring-offset-1 scale-110 shadow-md z-20 relative' : ''}
+                                                    `}
+                                                >
+                                                    {value.total}
+                                                </button>
+                                            </td>
+                                        );
+                                    })}
                                 </tr>
-                                {fubResult?.rowId === String(row.id) && (
-                                    <tr className="bg-slate-50/70">
-                                        <td className="sticky left-0 z-10 border-b border-slate-200 bg-slate-50 px-1 py-1 text-[9px] font-semibold text-slate-700 shadow-sm leading-tight">
-                                            Fechas de captura ({fubResult.totalRegistros})
-                                        </td>
-                                        {dates.map((date, index) => {
-                                            const headerDateKey = dateKey(date);
-                                            const records = fubResult.records.filter(record => {
-                                                const recDateKey = dateKey(record.fechaCaptura);
-                                                return recDateKey === headerDateKey;
-                                            });
+                                {fubResult?.rowId === String(row.id) && (() => {
+                                    const records = [...fubResult.records].sort((a, b) => {
+                                        const dateA = dateKey(a.fechaCaptura);
+                                        const dateB = dateKey(b.fechaCaptura);
+                                        return dateA.localeCompare(dateB);
+                                    });
 
-                                            const cellValue = row.values[index] ?? row.values.find(v => dateKey(v.day) === headerDateKey);
-                                            const estatusDia = cellValue?.estatus;
+                                    const maxSubRows = Math.max(1, records.length);
 
-                                            return (
-                                                <td key={date} className="p-[0.5px]">
-                                                    {records.map(record => {
-                                                        const noTieneAlertamiento = String(record.existeAlertamiento ?? "").trim().toUpperCase() === "SI"; //Aqui guardamos la consulta en caso de que no tenga alertamiento
-                                                        return (
-                                                            <button
-                                                                key={String(record.fub)}
-                                                                onClick={() => setSelectedFub(record)}
-                                                                title={`FUB: ${record.fub} · Clic para ver detalle`}
-                                                                aria-label={`Ver detalle FUB ${record.fub}`}
-                                                                className={`
-                                                                    w-full
-                                                                    aspect-square
-                                                                    max-w-[28px]
-                                                                    max-h-[22px]
-                                                                    mx-auto
-                                                                    rounded-md
-                                                                    ${getColor(fubResult?.clickedEstatus ?? estatusDia ?? "")}
-                                                                    transition-transform
-                                                                    duration-150
-                                                                    hover:scale-110
-                                                                    hover:z-20
-                                                                    hover:relative
-                                                                    cursor-pointer
-                                                                    flex
-                                                                    items-center
-                                                                    justify-center
-                                                                    text-[9px]
-                                                                    text-slate-100
-                                                                `}
-                                                            >
-                                                                {noTieneAlertamiento ? (
-                                                                    <Siren size={13} className="text-white" />
-                                                                ) : (
-                                                                    <CircleSlash size={13} className="text-white" />
-                                                                )}
-                                                            </button>
-                                                        );
-                                                    })}
-                                                    {records.length === 0 && <div aria-hidden="true" className="w-full aspect-square max-w-[22px] mx-auto" />}
+                                    return Array.from({ length: maxSubRows }).map((_, subIndex) => {
+                                        const currentRecord = records[subIndex];
+                                        const recordDateKey = currentRecord ? dateKey(currentRecord.fechaCaptura) : "";
+
+                                        return (
+                                            <tr key={`fub-subrow-${subIndex}`} className="bg-slate-50/70">
+                                                {/* Etiqueta de la fila lateral */}
+                                                <td className="sticky left-0 z-10 border-b border-slate-100 px-1 py-1 text-[9px] font-semibold text-slate-700 shadow-sm leading-tight">
+                                                    {subIndex === 0
+                                                        ? `Registros (${fubResult.totalRegistros})`
+                                                        : ""}
                                                 </td>
-                                            );
-                                        })}
-                                    </tr>
-                                )}
+
+                                                {/* Recorrer cada columna de fecha de la cabecera */}
+                                                {dates.map((date) => {
+                                                    const headerDateKey = dateKey(date);
+                                                    // Validamos si este registro pertenece exactamente a esta columna de fecha
+                                                    const isMatch = currentRecord && recordDateKey === headerDateKey;
+
+                                                    return (
+                                                        <td key={date} className="p-[0.5px] align-top text-center border-b border-slate-100">
+                                                            {isMatch ? (
+                                                                (() => {
+                                                                    const noTieneAlertamiento = String(currentRecord.existeAlertamiento ?? "").trim().toUpperCase() === "SI";
+                                                                    return (
+                                                                        <button
+                                                                            key={String(currentRecord.fub)}
+                                                                            onClick={() => setSelectedFub(currentRecord)}
+                                                                            title={`FUB: ${currentRecord.fub} · Clic para ver detalle`}
+                                                                            aria-label={`Ver detalle FUB ${currentRecord.fub}`}
+                                                                            className={`
+                                                                                w-full
+                                                                                aspect-square
+                                                                                max-w-[28px]
+                                                                                max-h-[22px]
+                                                                                mx-auto
+                                                                                my-0.5
+                                                                                rounded-md
+                                                                                ${getColor(fubResult?.clickedEstatus ?? "")}
+                                                                                transition-transform
+                                                                                duration-150
+                                                                                hover:scale-110
+                                                                                hover:z-20
+                                                                                hover:relative
+                                                                                cursor-pointer
+                                                                                flex
+                                                                                items-center
+                                                                                justify-center
+                                                                                text-[9px]
+                                                                                text-slate-100
+                                                                            `}
+                                                                        >
+                                                                            {noTieneAlertamiento ? (
+                                                                                <img
+                                                                                    src={alertaImg}
+                                                                                    alt="Alerta"
+                                                                                    className="w-4 h-4 object-contain pointer-events-none"
+                                                                                />
+                                                                            ) : (
+                                                                                "-"
+                                                                            )}
+                                                                        </button>
+                                                                    );
+                                                                })()
+                                                            ) : (
+                                                                <div aria-hidden="true" className="w-full aspect-square max-w-[28px] max-h-[22px] mx-auto" />
+                                                            )}
+                                                        </td>
+                                                    );
+                                                })}
+                                            </tr>
+                                        );
+                                    });
+                                })()}
                                 {loadingFubRow === String(row.id) && <tr><td colSpan={dates.length + 1} className="bg-slate-50 px-3 py-2 text-xs text-slate-500">Cargando detalle FUB…</td></tr>}
                             </Fragment>
                         ))}

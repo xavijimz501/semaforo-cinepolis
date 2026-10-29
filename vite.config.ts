@@ -8,4 +8,23 @@ export default defineConfig({
     react(),
     tailwindcss()
   ],
+  //PROBLEMAS DE CORS
+  //server: {
+  //  proxy: {
+  //    '/api': {
+  //      target: 'http://10.2.72.40:8109',
+  //      changeOrigin: true,
+  //      secure: false,
+  //    },
+  //  },
+  //},
+  //preview: {
+  //  proxy: {
+  //    '/api': {
+  //      target: 'http://10.2.72.40:8109',
+  //      changeOrigin: true,
+  //      secure: false,
+  //    },
+  //  },
+  //},
 })

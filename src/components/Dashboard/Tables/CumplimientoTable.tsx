@@ -12,6 +12,7 @@ export default function CumplimientoTable({ rows, onEstadoClick, maxHeight = "ma
     const totals = useMemo(() => {
         return rows.reduce((acc, item) => ({
             totalRegistros: acc.totalRegistros + item.totalRegistros,
+            totalArt108: acc.totalArt108 + item.totalArt108,
             totalDesaparecidos: acc.totalDesaparecidos + item.totalDesaparecidos,
             totalLocalizados: acc.totalLocalizados + item.totalLocalizados,
             totalConAlerta: acc.totalConAlerta + item.totalConAlerta,
@@ -20,7 +21,7 @@ export default function CumplimientoTable({ rows, onEstadoClick, maxHeight = "ma
             totalSinAlerta: acc.totalSinAlerta + item.totalSinAlerta,
             totalSinAlertaLoc: acc.totalSinAlertaLoc + item.totalSinAlertaLoc,
             totalSinAlertaDes: acc.totalSinAlertaDes + item.totalSinAlertaDes,
-            totalArt108: acc.totalArt108 + item.totalArt108,
+
             totalFaltaDato: acc.totalFaltaDato + item.totalFaltaDato,
         }), {
             totalRegistros: 0, totalDesaparecidos: 0, totalLocalizados: 0,

@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 
-import { BarChart3, Map, } from "lucide-react";
+import { BarChart3, Map, Grid3X3 } from "lucide-react";
 import logoSystem from "../../../assets/CNB.png";
 
 export default function Header() {
@@ -11,10 +11,15 @@ export default function Header() {
             icon: BarChart3,
             path: "/estadisticas",
         },
+        //{
+        //label: "Estadísticas 2",
+        //icon: Map,
+        //path: "/estadisticas-2",
+        //},
         {
-            label: "Estadísticas 2",
-            icon: Map,
-            path: "/estadisticas-2",
+            label: "Estadísticas 3",
+            icon: Grid3X3,
+            path: "/estadisticas-3",
         },
     ];
 

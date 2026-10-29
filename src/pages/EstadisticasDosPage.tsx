@@ -23,7 +23,6 @@ export default function EstadisticasDosPage() {
         try {
 
             setLoadingTableCumplimiento(true);
-
             const response = await GetTableCumplimiento(estado);
             setDataCumplimiento(response);
             setLoadingTableCumplimiento(false);

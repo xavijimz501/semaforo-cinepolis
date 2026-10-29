@@ -50,20 +50,22 @@ export const GetObtenerFub = (idEstado: number, fechaConsulta: string) => {
     );
 };
 
-export const GetTableCumplimiento = (estado: any) =>
+export const GetTableCumplimiento = (estado?: any, periodo?: string) =>
     apiRequest<any>(
         axiosInstance.get(`/api/Fichas/estadistica-rnpdno-alerta`, {
             params: {
                 estado,
+                ...(periodo ? { periodo } : {}),
             },
         })
     );
 
-export const GetTableAutoridades = (estado: any) =>
+export const GetTableAutoridades = (estado?: any, periodo?: string) =>
     apiRequest<any>(
         axiosInstance.get(`/api/Fichas/estadistica-rnpdno-alerta-canalizacion`, {
             params: {
                 estado,
+                ...(periodo ? { periodo } : {}),
             },
         })
     );

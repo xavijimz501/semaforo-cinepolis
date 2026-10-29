@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 
-import { BarChart3, Map, Grid3X3 } from "lucide-react";
+import { BarChart3, Grid3X3 } from "lucide-react";
 import logoSystem from "../../../assets/CNB.png";
 
 export default function Header() {

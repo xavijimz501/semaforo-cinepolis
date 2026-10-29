@@ -13,7 +13,7 @@ export interface HeatmapValue {
 }
 
 export interface HeatmapRow {
-    id: string |number;
+    id: string | number;
     estadoId: number | string;
     name: string;
     values: HeatmapValue[];

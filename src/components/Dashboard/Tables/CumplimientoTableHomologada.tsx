@@ -13,21 +13,16 @@ export default function CumplimientoTableHomologada({ rows, onEstadoClick, maxHe
         return rows.reduce((acc, item) => ({
             totalRegistros: acc.totalRegistros + item.totalRegistros,
             totalArt108: acc.totalArt108 + item.totalArt108,
-            totalDesaparecidos: acc.totalDesaparecidos + item.totalDesaparecidos,
-            totalLocalizados: acc.totalLocalizados + item.totalLocalizados,
+            totalSuceptibles: acc.totalRegistros + item.totalRegistros,
             totalConAlerta: acc.totalConAlerta + item.totalConAlerta,
-            totalAlertaLoc: acc.totalAlertaLoc + item.totalAlertaLoc,
-            totalAlertaDes: acc.totalAlertaDes + item.totalAlertaDes,
             totalSinAlerta: acc.totalSinAlerta + item.totalSinAlerta,
             totalSinAlertaLoc: acc.totalSinAlertaLoc + item.totalSinAlertaLoc,
-            totalSinAlertaDes: acc.totalSinAlertaDes + item.totalSinAlertaDes,
 
             totalFaltaDato: acc.totalFaltaDato + item.totalFaltaDato,
         }), {
-            totalRegistros: 0, totalDesaparecidos: 0, totalLocalizados: 0,
-            totalConAlerta: 0, totalAlertaLoc: 0, totalAlertaDes: 0,
-            totalSinAlerta: 0, totalSinAlertaLoc: 0, totalSinAlertaDes: 0,
-            totalArt108: 0, totalFaltaDato: 0,
+            totalRegistros: 0, totalArt108: 0, totalSuceptibles: 0,
+            totalConAlerta: 0, totalSinAlerta: 0, totalSinAlertaLoc: 0,
+            totalFaltaDato: 0,
         });
     }, [rows]);
 
@@ -56,18 +51,22 @@ export default function CumplimientoTableHomologada({ rows, onEstadoClick, maxHe
     return (
         <div className={`w-full overflow-y-auto overflow-x-auto ${maxHeight} rounded-2xl border border-slate-200 bg-white shadow-sm`}>
 
-            <table className="w-full border-collapse table-fixed min-w-[700px]">
+            <table className="w-full border-collapse table-fixed min-w-[680px]">
 
-                {/* Anchos de columna proporcionales */}
+                {/* Anchos de columna proporcionales idénticos a AutoridadesTable */}
                 <colgroup>
                     {/* Estado — más ancha */}
-                    <col className="w-[14%]" />
-                    {/* 11 columnas numéricas — distribuidas */}
-                    {Array.from({ length: 11 }).map((_, i) => (
-                        <col key={i} style={{ width: "5.5%" }} />
+                    <col style={{ width: "18%" }} />
+                    {/* Registros, Art108, Suceptibles, Con Alerta, Sin Alerta */}
+                    {Array.from({ length: 5 }).map((_, i) => (
+                        <col key={i} style={{ width: "7%" }} />
                     ))}
-                    {/* Cumplimiento — algo más ancha */}
-                    <col className="w-[9%]" />
+                    {/* Sin Alerta (Localizados) — amarillo */}
+                    <col style={{ width: "9%" }} />
+                    {/* Sin Alerta (Faltan Datos) — amarillo */}
+                    <col style={{ width: "9%" }} />
+                    {/* Cumplimiento */}
+                    <col style={{ width: "9%" }} />
                 </colgroup>
 
                 <thead className="sticky top-0 z-30 bg-[#611232]">
@@ -78,20 +77,30 @@ export default function CumplimientoTableHomologada({ rows, onEstadoClick, maxHe
                         </th>
 
                         {[
-                            "Registros", "Art. 108", "Desaparecidos", "Localizados",
-                            "Con Alerta", "Alerta Loc.", "Alerta Des.",
-                            "Sin Alerta", "Sin Alerta Loc.", "Sin Alerta Des.",
+                            "Registros", "Art. 108", "Suceptibles",
+                            "Con Alerta", "Sin Alerta"
 
                         ].map(label => (
                             <th key={label} className={thBase}>{label}</th>
                         ))}
 
-                        {/* Falta Dato — amarillo */}
+                        {/* Sin Alerta (Localizados) — encabezado amarillo */}
                         <th className="sticky top-0 z-30 px-1 py-2 text-center text-[9px] sm:text-[10px] md:text-[11px] lg:text-xs font-semibold tracking-tight bg-amber-400 text-amber-900 border-b border-amber-500">
-                            Falta Dato
+                            Sin Alerta
+                            <br />
+                            <span className="font-normal">(Localizados)</span>
                         </th>
 
-                        <th className={thBase}>Cumplimiento</th>
+                        {/* Falta Dato — amarillo */}
+                        <th className="sticky top-0 z-30 px-1 py-2 text-center text-[9px] sm:text-[10px] md:text-[11px] lg:text-xs font-semibold tracking-tight bg-amber-400 text-amber-900 border-b border-amber-500">
+                            Sin Alerta
+                            <br />
+                            <span className="font-normal">(Faltan Datos)</span>
+                        </th>
+
+                        <th className={thBase}>
+                            Cumplimiento
+                        </th>
 
                     </tr>
                 </thead>
@@ -128,14 +137,10 @@ export default function CumplimientoTableHomologada({ rows, onEstadoClick, maxHe
 
                             <td className={cellBase}>{row.totalRegistros}</td>
                             <td className={cellBase}>{row.totalArt108}</td>
-                            <td className={cellBase}>{row.totalDesaparecidos}</td>
-                            <td className={cellBase}>{row.totalLocalizados}</td>
+                            <td className={cellBase}>{row.totalRegistros}</td>
                             <td className={cellBase}>{row.totalConAlerta}</td>
-                            <td className={cellBase}>{row.totalAlertaLoc}</td>
-                            <td className={cellBase}>{row.totalAlertaDes}</td>
                             <td className={cellBase}>{row.totalSinAlerta}</td>
                             <td className={cellBase}>{row.totalSinAlertaLoc}</td>
-                            <td className={cellBase}>{row.totalSinAlertaDes}</td>
 
 
                             {/* Falta Dato — fondo amarillo */}
@@ -170,14 +175,19 @@ export default function CumplimientoTableHomologada({ rows, onEstadoClick, maxHe
                         </td>
 
                         {[
-                            totals.totalRegistros, totals.totalArt108, totals.totalDesaparecidos, totals.totalLocalizados,
-                            totals.totalConAlerta, totals.totalAlertaLoc, totals.totalAlertaDes,
-                            totals.totalSinAlerta, totals.totalSinAlertaLoc, totals.totalSinAlertaDes,
+                            totals.totalRegistros, totals.totalArt108,
+                            totals.totalSuceptibles, totals.totalConAlerta,
+                            totals.totalSinAlerta
                         ].map((val, i) => (
                             <td key={i} className="py-2 px-1 text-center text-[9px] sm:text-[10px] md:text-[11px] lg:text-xs">
                                 {val}
                             </td>
                         ))}
+
+                        {/* Total Sin Alerta (Localizados) — amarillo en footer también */}
+                        <td className="py-2 px-1 text-center text-[9px] sm:text-[10px] md:text-[11px] lg:text-xs bg-amber-500 text-amber-950 font-bold">
+                            {totals.totalSinAlertaLoc}
+                        </td>
 
                         {/* Total Falta Dato — amarillo en footer también */}
                         <td className="py-2 px-1 text-center text-[9px] sm:text-[10px] md:text-[11px] lg:text-xs bg-amber-500 text-amber-950 font-bold">

@@ -17,18 +17,19 @@ export default function EstadisticasTresPage() {
     const [dataCumplimiento, setDataCumplimiento] = useState<any>(null);
 
     useEffect(() => {
-        loadTableCumplimiento();
+        loadTableCumplimiento(undefined, periodo);
         loadTableAutoridades(undefined, periodo);
     }, [periodo]);
 
-    const loadTableCumplimiento = async (estado?: string) => {
+    const loadTableCumplimiento = async (estado?: string, periodoSeleccionado: PeriodoType = periodo) => {
         try {
             setLoadingTableCumplimiento(true);
-            const response = await GetTableCumplimiento(estado);
+            const response = await GetTableCumplimiento(estado, periodoSeleccionado);
             setDataCumplimiento(response);
-            setLoadingTableCumplimiento(false);
         } catch (error) {
-            console.log("No se pudo obtener la información de tabla de cumplimiento");
+            console.log("No se pudo obtener la información de tabla de cumplimiento", error);
+        } finally {
+            setLoadingTableCumplimiento(false);
         }
     };
 
@@ -37,7 +38,6 @@ export default function EstadisticasTresPage() {
             setLoadingTableAutoridades(true);
             const response = await GetTableAutoridades(estado, periodoSeleccionado);
             setDataAutoridades(response);
-
         } catch (error) {
             console.log("No se pudo obtener la información de tabla de autoridades", error);
         } finally {
@@ -133,10 +133,10 @@ export default function EstadisticasTresPage() {
 
                         {
                             loadingTableCumplimiento ? (
-                                <LoaderStyled text="Cargando Tabla de cumplimiento" />
+                                <LoaderStyled text={`Cargando Tabla de cumplimiento (${periodo === "15dias" ? "15 Días" : "72 Horas"})`} />
                             ) : (
                                 <>
-                                    <CumplimientoTableHomologada rows={dataCumplimiento} /* onEstadoClick={handleEstadoClick} */ />
+                                    <CumplimientoTableHomologada rows={dataCumplimiento ?? []} /* onEstadoClick={handleEstadoClick} */ />
                                 </>
 
                             )

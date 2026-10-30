@@ -7,10 +7,12 @@ interface Props {
     maxHeight?: string;
 }
 
-export default function CumplimientoTableHomologada({ rows, onEstadoClick, maxHeight = "max-h-[600px]" }: Props) {
+export default function CumplimientoTableHomologada({ rows = [], onEstadoClick, maxHeight = "max-h-[600px]" }: Props) {
+
+    const safeRows = rows ?? [];
 
     const totals = useMemo(() => {
-        return rows.reduce((acc, item) => ({
+        return safeRows.reduce((acc, item) => ({
             totalRegistros: acc.totalRegistros + item.totalRegistros,
             totalArt108: acc.totalArt108 + item.totalArt108,
             totalSuceptibles: acc.totalRegistros + item.totalRegistros,
@@ -24,7 +26,7 @@ export default function CumplimientoTableHomologada({ rows, onEstadoClick, maxHe
             totalConAlerta: 0, totalSinAlerta: 0, totalSinAlertaLoc: 0,
             totalFaltaDato: 0,
         });
-    }, [rows]);
+    }, [safeRows]);
 
     const getCumplimientoColor = (value: number) => {
         if (value >= 90) return "bg-emerald-500";
@@ -32,7 +34,7 @@ export default function CumplimientoTableHomologada({ rows, onEstadoClick, maxHe
         return "bg-red-500";
     };
 
-    if (!rows.length) {
+    if (!safeRows.length) {
         return (
             <div className="flex h-40 items-center justify-center rounded-2xl border border-slate-200 bg-white">
                 <span className="text-sm text-slate-500">No hay información disponible</span>
@@ -45,8 +47,8 @@ export default function CumplimientoTableHomologada({ rows, onEstadoClick, maxHe
     const thBase = "sticky top-0 z-30 bg-[#611232] px-1 py-2 text-center text-[9px] sm:text-[10px] md:text-[11px] lg:text-xs font-semibold tracking-tight text-white border-b border-[#4d0e27]";
 
     const sortedRows = useMemo(() => {
-        return [...rows].sort((a, b) => a.cumplimiento - b.cumplimiento);
-    }, [rows]);
+        return [...safeRows].sort((a, b) => a.cumplimiento - b.cumplimiento);
+    }, [safeRows]);
 
     return (
         <div className={`w-full overflow-y-auto overflow-x-auto ${maxHeight} rounded-2xl border border-slate-200 bg-white shadow-sm`}>
